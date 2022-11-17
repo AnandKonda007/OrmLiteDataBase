@@ -15,7 +15,6 @@ import java.util.List;
 
 public class Home extends AppCompatActivity {
     public StudentAdapter studentAdapter;
-   // List<StudentInfo> studentInfoDB = new ArrayList<>();
     RecyclerView recyclerView;
 
     @Override

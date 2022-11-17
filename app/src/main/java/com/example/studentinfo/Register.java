@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -19,7 +20,9 @@ import java.util.Calendar;
 
 public class Register extends AppCompatActivity {
     EditText email, password, username, Dob, age, phoneno;
-    RadioGroup gender;
+    RadioGroup genderGroup;
+    RadioButton genderButton;
+
     Button submit;
     boolean isAllFieldsChecked = false;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
@@ -39,12 +42,16 @@ public class Register extends AppCompatActivity {
         dobActions();
         age = findViewById(R.id.age);
         phoneno = findViewById(R.id.phonenumber);
-        gender = findViewById(R.id.gender);
+        genderGroup = findViewById(R.id.gender);
+
+        int selectedId = genderGroup.getCheckedRadioButtonId();
+        genderButton = findViewById(selectedId);
+
         submit = findViewById(R.id.submit);
 
 
-        if(StudentDataController.getInstance().currentUser!=null){
-            StudentInfo info=StudentDataController.getInstance().currentUser;
+        if (StudentDataController.getInstance().currentUser != null) {
+            StudentInfo info = StudentDataController.getInstance().currentUser;
             email.setEnabled(false);
             email.setText(info.getEmail());
             username.setText(info.getUsername());
@@ -52,6 +59,9 @@ public class Register extends AppCompatActivity {
             password.setText(info.getPassword());
             Dob.setText(info.getDob());
             phoneno.setText(info.getPhoneno());
+           // genderButton.setChecked(true);
+
+
         }
 
         registerActions();
@@ -79,6 +89,7 @@ public class Register extends AppCompatActivity {
             }
         });
     }
+
     private void registerActions() {
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -91,14 +102,21 @@ public class Register extends AppCompatActivity {
                     studentInfo.setUsername(username.getText().toString());
                     studentInfo.setPhoneno(phoneno.getText().toString());
                     studentInfo.setAge(age.getText().toString());
+
+                    int selectedId = genderGroup.getCheckedRadioButtonId();
+                    genderButton = findViewById(selectedId);
+
+                    studentInfo.setGender(genderButton.getText().toString());
+
+
                     studentInfo.setPassword(password.getText().toString());
-                    if(StudentDataController.getInstance().currentUser!=null) {
-                        StudentDataController.getInstance().currentUser=studentInfo;
-                        StudentDataController.getInstance().updateUserData( StudentDataController.getInstance().currentUser);
+                    if (StudentDataController.getInstance().currentUser != null) {
+                        StudentDataController.getInstance().currentUser = studentInfo;
+                        StudentDataController.getInstance().updateUserData(StudentDataController.getInstance().currentUser);
                         Toast.makeText(getApplicationContext(), "update data successfullyu", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Register.this, Home.class);
                         startActivity(intent);
-                    }else {
+                    } else {
                         if (StudentDataController.getInstance().insertUserData(studentInfo)) {
                             Intent intent = new Intent(Register.this, Home.class);
                             startActivity(intent);
@@ -108,8 +126,7 @@ public class Register extends AppCompatActivity {
                     }
 
 
-                }
-                else {
+                } else {
                     Toast.makeText(Register.this, "Please enter Required Fields", Toast.LENGTH_SHORT).show();
                 }
             }
