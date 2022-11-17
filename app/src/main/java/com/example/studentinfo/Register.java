@@ -150,6 +150,8 @@ public class Register extends AppCompatActivity {
             return false;
         }
 
+
+        
         if (Dob.length() == 0) {
             Dob.setError("Date of birth is required");
             return false;
