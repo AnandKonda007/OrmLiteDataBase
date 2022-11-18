@@ -12,12 +12,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class StudentDataController extends OrmLiteBaseActivity {
+    public static StudentDataController controller;
     public DataBaseHelper helper;
     public ArrayList<StudentInfo> allUsers = new ArrayList<>();
-    public  StudentInfo currentUser;
-    public static StudentDataController controller;
+    public StudentInfo currentUser;
 
-    public static  StudentDataController getInstance() {
+    public static StudentDataController getInstance() {
         if (controller == null) {
             controller = new StudentDataController();
         }
@@ -25,10 +25,9 @@ public class StudentDataController extends OrmLiteBaseActivity {
     }
 
 
-    public void  fillContext(Context context1)
-    {
+    public void fillContext(Context context1) {
 
-        Log.e("DBStatus","Fill Context Called");
+        Log.e("DBStatus", "Fill Context Called");
         helper = new DataBaseHelper(context1);
     }
 
@@ -38,7 +37,7 @@ public class StudentDataController extends OrmLiteBaseActivity {
         try {
             helper.getUserDao().create(userdata);
             fetchUserData();
-            Log.e("fetch", ""+allUsers);
+            Log.e("fetch", "" + allUsers);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -52,32 +51,31 @@ public class StudentDataController extends OrmLiteBaseActivity {
         allUsers = new ArrayList<>();
 
         try {
-            allUsers = (ArrayList) helper.getUserDao ().queryForAll ();
+            allUsers = (ArrayList) helper.getUserDao().queryForAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Log.e("fetching", "user data fetched successfully"+allUsers.size());
+        Log.e("fetching", "user data fetched successfully" + allUsers.size());
 
         return allUsers;
     }
 
 
-
     //updating the userdata
-    public void updateUserData( StudentInfo user) {
+    public void updateUserData(StudentInfo user) {
         try {
             UpdateBuilder<StudentInfo, Integer> updateBuilder = helper.getUserDao().updateBuilder();
-            updateBuilder.updateColumnValue ( "username",user.getUsername ());
-            updateBuilder.updateColumnValue("password", user.getPassword ());
-            updateBuilder.updateColumnValue("dob", user.getDob ());
-            updateBuilder.updateColumnValue("phoneno", user.getPhoneno ());
-            updateBuilder.updateColumnValue("age", user.getAge ());
-            updateBuilder.updateColumnValue("gender",user.getGender());
-            updateBuilder.where().eq("email", user.getEmail ());
+            updateBuilder.updateColumnValue("username", user.getUsername());
+            updateBuilder.updateColumnValue("password", user.getPassword());
+            updateBuilder.updateColumnValue("dob", user.getDob());
+            updateBuilder.updateColumnValue("phoneno", user.getPhoneno());
+            updateBuilder.updateColumnValue("age", user.getAge());
+            updateBuilder.updateColumnValue("gender", user.getGender());
+            updateBuilder.where().eq("email", user.getEmail());
 
             updateBuilder.update();
             Log.e("update data", "updated the data successfully");
-            Log.e("new user id", "" + user.getUsername () + "" );
+            Log.e("new user id", "" + user.getUsername() + "");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -104,10 +102,9 @@ public class StudentDataController extends OrmLiteBaseActivity {
     }
 
 
+    public StudentInfo getUserObjectForEmail(String email) {
 
-    public StudentInfo getUserObjectForEmail(String email){
-
-        if(allUsers.size() > 0 ) {
+        if (allUsers.size() > 0) {
             for (int l = 0; l < allUsers.size(); l++) {
                 StudentInfo obUser = allUsers.get(l);
                 if (obUser.getUsername().equals(email)) {
@@ -115,7 +112,7 @@ public class StudentDataController extends OrmLiteBaseActivity {
                 }
             }
         }
-        return  null;
+        return null;
     }
 }
 

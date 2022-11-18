@@ -125,7 +125,7 @@
         tools:layout_editor_absoluteX="0dp">
 
         <RadioButton
-            android:id="@+id/male"
+            android:id="@+id/Male"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Male" />

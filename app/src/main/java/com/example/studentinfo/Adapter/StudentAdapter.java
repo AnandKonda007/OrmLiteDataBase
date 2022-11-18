@@ -41,7 +41,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.studentI
         holder.phonenumber.setText(student.getPhoneno());
         holder.age.setText(student.getAge());
         holder.email.setText(student.getEmail());
-        holder.gender.setText(student.getGender());
+//        holder.gender.setText(student.getGender());
         //studentInfo.setGender(genderButton.getText().toString());
 
         holder.edit.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +102,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.studentI
             age = itemView.findViewById(R.id.age2);
             edit = itemView.findViewById(R.id.edit);
             delete = itemView.findViewById(R.id.delete);
-            gender=itemView.findViewById(R.id.gender2);
+          //  gender=itemView.findViewById(R.id.gender2);
 
 
         }

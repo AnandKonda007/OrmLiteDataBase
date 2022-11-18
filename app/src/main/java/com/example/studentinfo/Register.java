@@ -29,6 +29,9 @@ public class Register extends AppCompatActivity {
     boolean isAllFieldsChecked = false;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
