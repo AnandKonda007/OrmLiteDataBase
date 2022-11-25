@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -23,20 +25,50 @@ public class Register extends AppCompatActivity {
     EditText email, password, username, Dob, age, phoneno;
     RadioGroup genderGroup;
     RadioButton genderMale,genderFemale;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
     Button submit;
+    boolean passwordVisible;
     boolean isAllFieldsChecked = false;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-
-
-
+    String gender= "Male";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         actions();
+        passwordVisibleActions();
+    }
+
+    private void passwordVisibleActions() {
+
+        password.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int Right = 2;
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= password.getRight() - password.getCompoundDrawables()[Right].getBounds().width()) {
+                        int selection = password.getSelectionEnd();
+                        if (passwordVisible) {
+                            password.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.visibility_off, 0);
+                            password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            passwordVisible = false;
+
+                        } else {
+                            password.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.visibility, 0);
+                            password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                            passwordVisible = true;
+
+                        }
+                        password.setSelection(selection);
+                        return true;
+
+                    }
+
+                }
+                return false;
+            }
+        });
     }
 
     private void actions() {
@@ -48,8 +80,7 @@ public class Register extends AppCompatActivity {
         age = findViewById(R.id.age);
         phoneno = findViewById(R.id.phonenumber);
         genderActions();
-       /* int selectedId = genderGroup.getCheckedRadioButtonId();
-        genderButton = findViewById(selectedId);*/
+
         submit = findViewById(R.id.submit);
 
 
@@ -62,8 +93,15 @@ public class Register extends AppCompatActivity {
             password.setText(info.getPassword());
             Dob.setText(info.getDob());
             phoneno.setText(info.getPhoneno());
+            if(info.getGender().equals("Male")){
+                genderMale.setChecked(true);
+                genderFemale.setChecked(false);
+            }else{
+                genderFemale.setChecked(true);
+                genderMale.setChecked(false);
+            }
 
-           // genderButton.setChecked(true);
+            // genderButton.setChecked(true);
 
 
         }
@@ -76,28 +114,16 @@ public class Register extends AppCompatActivity {
         genderGroup = findViewById(R.id.gender);
         genderMale=findViewById(R.id.Male);
         genderFemale=findViewById(R.id.Female);
-        sharedPreferences=getSharedPreferences("gender",0);
-        int gender= sharedPreferences.getInt("gender",3);
-        editor=sharedPreferences.edit();
-        if(gender==1){
-            genderMale.setChecked(true);
-        }else if(gender==0){
-            genderFemale.setChecked(true);
-        }
         genderGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.Male) {
-                    editor.putInt("gender", 1);
+                    gender="Male";
                 } else if (checkedId == R.id.Female) {
-                    editor.putInt("gender", 0);
+                    gender="Female";
                 }
-                editor.commit();
             }
         });
-
-
-
 
     }
 
@@ -106,7 +132,6 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Calendar c = Calendar.getInstance();
-
                 int year = c.get(Calendar.YEAR);
                 int month = c.get(Calendar.MONTH);
                 int day = c.get(Calendar.DAY_OF_MONTH);
@@ -136,12 +161,7 @@ public class Register extends AppCompatActivity {
                     studentInfo.setAge(age.getText().toString());
                     studentInfo.setDob(Dob.getText().toString());
                     studentInfo.setPassword(password.getText().toString());
-
-                    //int selectedId = genderGroup.getCheckedRadioButtonId();
-                    //genderButton = findViewById(selectedId);
-
-                   // studentInfo.setGender(genderButton.getText().toString());
-
+                    studentInfo.setGender(gender);
 
                     if (StudentDataController.getInstance().currentUser != null) {
                         StudentDataController.getInstance().currentUser = studentInfo;
