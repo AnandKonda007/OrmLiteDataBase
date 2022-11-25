@@ -32,6 +32,8 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.studentI
         View itemview = LayoutInflater.from(parent.getContext()).inflate(R.layout.studentinfo, parent, false);
         return new studentInfo(itemview);
 
+
+        
     }
 
     @Override
